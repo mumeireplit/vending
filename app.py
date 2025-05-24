@@ -1,4 +1,3 @@
-
 from flask import Flask
 import discord
 from discord.ext import commands
@@ -75,6 +74,35 @@ class VendingView(discord.ui.View):
 @bot.event
 async def on_ready():
     print(f'{bot.user} としてログインしました')
+
+@bot.command(name="vending")
+async def help_command(ctx, arg="help"):
+    if arg == "help":
+        embed = discord.Embed(title="自動販売機ボットの使い方", color=0x00ff00)
+        
+        # 一般ユーザー向けコマンド
+        embed.add_field(
+            name="一般コマンド",
+            value="""
+            `!show` - 商品一覧と購入ボタンを表示
+            `!coincheck` - 所持コインを確認
+            """,
+            inline=False
+        )
+        
+        # 管理者向けコマンド
+        embed.add_field(
+            name="管理者コマンド（8j1uとmume_dayoのみ使用可能）",
+            value="""
+            `!addcoins @メンバー 数値` - メンバーにコインを追加
+            `!newitem 商品名 価格 在庫数` - 新しい商品を追加（在庫数はオプション、デフォルト5）
+            `!add 商品名 1:メッセージ1 2:メッセージ2` - 商品にDMメッセージを追加
+            `!del 商品名` - 商品を削除
+            """,
+            inline=False
+        )
+        
+        await ctx.send(embed=embed)
 
 @bot.command(name="show")
 async def list_items(ctx):
